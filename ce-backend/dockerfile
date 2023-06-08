@@ -1,0 +1,12 @@
+FROM python:3.11
+
+WORKDIR /ce-backend
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+COPY . .
+
+CMD ["python", "manage.py", "runsslserver", "0.0.0.0:7000", "--cert", "ssl/certificate.pem", "--key", "ssl/key.pem"]
+
