@@ -15,10 +15,17 @@ export const loginData = createSlice({
     accessToken: "",
     role: "",
     userList: [],
-      filteredList: [],
-    
+    filteredList: [],
+    formData: {},
+    request: "Post",
   },
   reducers: {
+    userRequestObjects: (state: any, action: any) => {
+      state.formData = action.payload;
+    },
+    userRequests: (state: any, action: any) => {
+      state.request = action.payload;
+    },
     loginStatus: (state: any, action: any) => {
       state.isLoggedIn = action.payload;
     },
@@ -48,6 +55,13 @@ export const loginData = createSlice({
   },
 });
 
-export const { loginStatus, loginError, Token, userRole, userFilteredlist } =
-  loginData.actions;
+export const {
+  userRequestObjects,
+  userRequests,
+  loginStatus,
+  loginError,
+  Token,
+  userRole,
+  userFilteredlist,
+} = loginData.actions;
 export default loginData.reducer;

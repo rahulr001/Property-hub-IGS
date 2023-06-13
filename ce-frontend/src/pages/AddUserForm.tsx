@@ -53,7 +53,7 @@ const AddUserForm = () => {
               textDecoration: "none",
             }}
           >
-            Manager Details
+            Builder Details
           </Typography>
         </Box>
         <AddUserFormCom />

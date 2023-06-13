@@ -8,12 +8,14 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SuperAdminDataGrid from "./SuperAdminDataGrid";
 import { TextFieldStyle } from "../../Utils/Constants";
 import { SuperAdminDataGridLogics } from "../../Utils/SuperAdminDataGridLogics";
+import { useSelector } from "react-redux";
+import SnackBar from "../SnakeBar";
 type Props = {};
 
 const SuperAdminDataElement = (props: Props) => {
   const theme = useTheme();
   const { search, setSearch, handleSearchClear } = SuperAdminDataGridLogics();
-
+  const message = useSelector((state: any) => state.PropertySlice.snackeBarMsg);
   return (
     <>
       <Paper
@@ -74,6 +76,7 @@ const SuperAdminDataElement = (props: Props) => {
         </Paper>
         <SuperAdminDataGrid />
       </Paper>
+      <SnackBar message={message} duration={2000} navigate={0} />
     </>
   );
 };

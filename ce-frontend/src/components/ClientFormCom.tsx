@@ -11,6 +11,7 @@ import { Grid } from "@mui/material";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import {
   BHK,
+  ClientUserFormInputs,
   FormControl,
   Status,
   listingType,
@@ -20,10 +21,21 @@ import {
 import { ClientFormLogics } from "../Utils/ClientFormLogics";
 import FormActionButtons from "./FormActionButtons";
 import { TextValidatorStyle, TypographyStyles } from "../Utils/Constants";
+import AddUserFormLogics from "../Utils/AddUserFormLogics";
+
 const ClientFormCom = () => {
-  const { handleChange, handleCheckbox, values, handleSubmit, handleClear } =
-    ClientFormLogics();
-  const theme = useTheme();
+  const {
+    handleChange,
+    handleCheckbox,
+    values,
+    handleSubmit,
+    handleClear,
+    UserHandleChange,
+    userValues,
+  } = ClientFormLogics();
+  //   const { userValues, userHandleSubmit, UserHandleChange } =
+  //     AddUserFormLogics();
+
   return (
     <Paper
       elevation={3}
@@ -35,7 +47,10 @@ const ClientFormCom = () => {
       }}
     >
       <ValidatorForm
-        onSubmit={handleSubmit}
+        onSubmit={() => {
+          handleSubmit();
+          //   userHandleSubmit();
+        }}
         onError={(errors: any) => console.log(errors)}
       >
         <Grid
@@ -55,61 +70,45 @@ const ClientFormCom = () => {
             padding: "2rem",
           }}
         >
+          {ClientUserFormInputs.map((inputs) => (
+            <Grid item xs={6}>
+              <Typography style={TypographyStyles}>{inputs.label}</Typography>
+              <TextValidator
+                placeholder={inputs.placeholder}
+                id="outlined-basic"
+                variant="outlined"
+                value={userValues[inputs.name]}
+                onChange={UserHandleChange}
+                name={inputs.name}
+                required={inputs.required}
+                style={{
+                  width: "250px",
+                  marginTop: "0.5rem",
+                }}
+                sx={TextValidatorStyle}
+              />
+            </Grid>
+          ))}{" "}
           <Grid item xs={6}>
-            <Typography style={TypographyStyles}>Full name</Typography>
+            <Typography style={TypographyStyles}>Status</Typography>
             <TextValidator
-              name="Client_FullName"
-              value={values.Client_FullName}
-              onChange={handleChange}
-              placeholder="John Joe"
-              id="outlined-basic"
+              name="Status"
+              value={userValues.Status}
+              onChange={UserHandleChange}
               variant="outlined"
+              sx={TextValidatorStyle}
+              style={{ marginTop: "5px", width: "250px" }}
+              id="outlined-select-type"
               required={true}
-              style={{
-                width: "250px",
-                marginTop: "0.5rem",
-              }}
-              sx={TextValidatorStyle}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography style={TypographyStyles}>Email</Typography>
-            <TextValidator
-              name="Client_EMail"
-              value={values.Client_EMail}
-              onChange={handleChange}
-              validators={["isEmail"]}
-              errorMessages={["Please enter valid email"]}
-              placeholder="example@mail.com"
-              type="email"
-              id="outlined-basic"
-              variant="outlined"
-              required={true}
-              style={{
-                width: "250px",
-                marginTop: "0.5rem",
-              }}
-              sx={TextValidatorStyle}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography style={TypographyStyles}>Mobile number</Typography>
-            <TextValidator
-              name="Client_MobileNumber"
-              value={values.Client_MobileNumber}
-              onChange={handleChange}
-              placeholder="+91 9012121212"
-              id="outlined-basic"
-              variant="outlined"
-              validators={["matchRegexp:^[1-9][0-9]{9}$"]}
-              errorMessages={["Please enter 10 digit Mobile"]}
-              required
-              style={{
-                width: "250px",
-                marginTop: "0.5rem",
-              }}
-              sx={TextValidatorStyle}
-            />
+              select
+              defaultValue="Select"
+            >
+              {Status.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextValidator>
           </Grid>
           <Grid item xs={12}>
             <Typography style={TypographyStyles}>Property Title</Typography>
@@ -186,40 +185,6 @@ const ClientFormCom = () => {
             </TextValidator>
           </Grid>
           <Grid item xs={6}>
-            <Typography style={TypographyStyles}>Location</Typography>
-            <TextValidator
-              name="Client_Location"
-              value={values.Client_Location}
-              onChange={handleChange}
-              placeholder="ex. Chennai"
-              id="outlined-basic"
-              variant="outlined"
-              required={true}
-              style={{
-                width: "250px",
-                marginTop: "0.5rem",
-              }}
-              sx={TextValidatorStyle}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography style={TypographyStyles}>Address</Typography>
-            <TextValidator
-              name="Client_Address"
-              value={values.Client_Address}
-              onChange={handleChange}
-              placeholder="ex. No 1, street, etc.,"
-              id="outlined-basic"
-              variant="outlined"
-              required={true}
-              style={{
-                width: "250px",
-                marginTop: "0.5rem",
-              }}
-              sx={TextValidatorStyle}
-            />
-          </Grid>
-          <Grid item xs={6}>
             <Typography style={TypographyStyles}>Listing Price</Typography>
             <TextValidator
               name="Client_ListingPrice"
@@ -290,27 +255,6 @@ const ClientFormCom = () => {
               }}
               sx={TextValidatorStyle}
             />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography style={TypographyStyles}>Status</Typography>
-            <TextValidator
-              name="Client_Status"
-              value={values.Client_Status}
-              onChange={handleChange}
-              variant="outlined"
-              sx={TextValidatorStyle}
-              style={{ marginTop: "5px", width: "250px" }}
-              id="outlined-select-type"
-              required={true}
-              select
-              defaultValue="Select"
-            >
-              {Status.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextValidator>
           </Grid>
           <Grid item xs={6}>
             <Typography style={TypographyStyles}>Parking Lots</Typography>
@@ -427,10 +371,11 @@ const ClientFormCom = () => {
                 label={check.label}
                 name={check.name}
                 value={check.name}
+                checked={values.Client_PropertyAmenities.includes(check.name)}
               />
             ))}
           </FormGroup>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <Typography
               style={{
                 marginTop: "1rem",
@@ -464,7 +409,7 @@ const ClientFormCom = () => {
               }}
               sx={TextValidatorStyle}
             />
-          </Grid>
+          </Grid> */}
           <Grid
             item
             xs={3}

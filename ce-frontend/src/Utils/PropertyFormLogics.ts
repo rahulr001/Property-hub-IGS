@@ -13,11 +13,11 @@ export const PropertyFormLogics = () => {
     (state: any) => state.PropertySlice.formData
   );
   //   console.log(requestObject);
-  const userId = localStorage.getItem("user_id");
+  const userId: any = localStorage.getItem("user_id");
   const [values, setValues] = useState<any>(
     request === "Post"
       ? {
-          User_ID: userId,
+          User_ID: parseInt(userId),
           PropertyTitle: "",
           PropertyType: "Select",
           Property_ListingType: "Select",
@@ -37,7 +37,7 @@ export const PropertyFormLogics = () => {
   );
   const handleClear = () => {
     setValues({
-      User_ID: userId,
+      User_ID: parseInt(userId),
       PropertyTitle: "",
       PropertyType: "Select",
       Property_ListingType: "Select",
@@ -98,8 +98,8 @@ export const PropertyFormLogics = () => {
       axios
         .post(`${url}/property/`, values)
         .then((res) => {
-          //   console.log(res.data, "ssssss");
-          dispatch<any>(snackBarOpenMsg<any>(res.data.Response));
+          console.log(res);
+          dispatch<any>(snackBarOpenMsg<any>(res.data.response));
           dispatch<any>(snackBarOpen<any>(true));
         })
         .catch((err) => {
@@ -120,7 +120,8 @@ export const PropertyFormLogics = () => {
               err.response.data.Two_BHK ||
               err.response.data.Three_BHK ||
               err.response.data.ImgURL ||
-              err.response.data.Property_amenities
+              err.response.data.Property_amenities ||
+              "Something went wrong please login again"
           );
         });
     }
@@ -129,7 +130,7 @@ export const PropertyFormLogics = () => {
         .put(`${url}/property/${requestObject.Property_ID}/update`, values)
         .then((res) => {
           console.log(res.data);
-          dispatch<any>(snackBarOpenMsg<any>(res.data.Response));
+          dispatch<any>(snackBarOpenMsg<any>(res.data.response));
           dispatch<any>(snackBarOpen<any>(true));
         })
         .catch((err) => {
@@ -149,7 +150,8 @@ export const PropertyFormLogics = () => {
               err.response.data.Property_2BHK ||
               err.response.data.Property_3BHK ||
               err.response.data.Property_ImgURL ||
-              err.response.data.Property_Amenities
+              err.response.data.Property_Amenities ||
+              "Something went wrong please login again"
           );
         });
     }

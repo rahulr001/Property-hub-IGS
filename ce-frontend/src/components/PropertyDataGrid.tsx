@@ -1,22 +1,78 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { IconButton } from "@mui/material";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import { PropertyDataLogics } from "../Utils/PropertyDataGridLogics";
+import { Link } from "react-router-dom";
+import { requestObjects, requests } from "../Redux/ClientSlice";
+import { userRequestObjects, userRequests } from "../Redux/LoginSlice";
+import { ClientFormLogics } from "../Utils/ClientFormLogics";
+import AddUserFormLogics from "../Utils/AddUserFormLogics";
 export default function PropertyDataGrid() {
+  const { handleClientDelete } = ClientFormLogics();
+  const { handleDelete } = AddUserFormLogics();
   const Data: any = useSelector(
-    (state: any) => state.ClientSlice.filteredClientData.filteredClientData
+    (state: any) => state.ClientSlice.filteredClientData
   );
- 
+  const dispatch = useDispatch();
+
   const columns: GridColDef[] = [
-    // { field: "Client_ID", headerName: "S.NO", width: 100 },
     {
-      field: "Client_FullName",
+      field: "actions",
+      headerName: "Actions",
+      width: 180,
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => (
+        <div
+          style={{
+            display: "flex",
+            gap: ".5rem",
+          }}
+        >
+          {/* {params.row.Client_ID} */}
+          <IconButton
+            component={Link}
+            to={"/client_form"}
+            sx={{ boxShadow: 0, color: "black" }}
+            aria-label="edit"
+            onClick={() => {
+              dispatch<any>(requestObjects<any>(params.row));
+              dispatch<any>(requests<any>("Put"));
+              dispatch<any>(
+                userRequestObjects<any>(params.row.Client_PropertyID.User_ID)
+              );
+            }}
+          >
+            <BorderColorIcon />
+          </IconButton>
+          <IconButton
+            sx={{ boxShadow: 0, color: "red" }}
+            size="small"
+            aria-label="edit"
+            onClick={() => {
+              console.log(params.row);
+              handleClientDelete(
+                params.row.Client_PropertyID.User_ID.User_ID,
+                params.row.Client_ID
+              );
+            }}
+          >
+            <DeleteForeverIcon />
+          </IconButton>
+        </div>
+      ),
+    },
+    {
+      field: "Client_PropertyID",
       headerName: "Name",
       width: 180,
       headerAlign: "center",
       align: "center",
-      // editable: true,
+      renderCell: (params) => params.value.User_ID.Full_Name,
     },
     {
       field: "Client_Block",
@@ -24,7 +80,6 @@ export default function PropertyDataGrid() {
       width: 160,
       headerAlign: "center",
       align: "center",
-      // editable: true,
     },
     {
       field: "Client_FlatNo",
@@ -32,7 +87,6 @@ export default function PropertyDataGrid() {
       width: 160,
       headerAlign: "center",
       align: "center",
-      // editable: true,
     },
     {
       field: "Client_ListingType",
@@ -41,7 +95,6 @@ export default function PropertyDataGrid() {
       width: 120,
       headerAlign: "center",
       align: "center",
-      // editable: true,
     },
     {
       field: "Client_BHK",
@@ -50,7 +103,6 @@ export default function PropertyDataGrid() {
       width: 160,
       headerAlign: "center",
       align: "center",
-      // editable: true,
     },
     {
       field: "Client_Status",
@@ -59,7 +111,6 @@ export default function PropertyDataGrid() {
       width: 120,
       headerAlign: "center",
       align: "center",
-      // editable: true,
       renderCell: (params) => {
         const status = params.value as string;
         return (
@@ -100,7 +151,7 @@ export default function PropertyDataGrid() {
           },
         }}
         pageSizeOptions={[5]}
-        checkboxSelection
+        // checkboxSelection
         disableRowSelectionOnClick
       />
     </Box>

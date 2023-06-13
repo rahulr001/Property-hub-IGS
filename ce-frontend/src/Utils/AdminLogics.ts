@@ -14,10 +14,10 @@ export const AdminLogics = () => {
   const user_id: any = localStorage.getItem("user_id");
  
   const propertiesById: any = properties.filter(
-    (property: any) => (property.User_ID === parseInt(user_id))
+    (property: any) => property.User_ID.User_ID === parseInt(user_id)
   );
  
-  // console.log(properties)
+//   console.log(properties)
   const [searchTerm, setSearchTerm] = React.useState("");
   const [visibleProperties, setVisibleProperties] =
     React.useState<Property[]>(propertiesById);

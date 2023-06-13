@@ -61,7 +61,7 @@ const PropertyData = (props: Props) => {
             }}
           >
             {/* Property Owners */}
-            Client
+            Owner
           </Typography>
           <Button
             component={Link}

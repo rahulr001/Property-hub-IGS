@@ -11,14 +11,19 @@ export const SuperAdminDataGridLogics = () => {
     let filtered = Data.filter((property: any) =>
       property.Full_Name.toLowerCase().includes(search.toLowerCase())
     );
-    if (role === "admin") {
+    if (role === "Builder") {
       filtered = Data.filter(
-        (data: any) => data.Role === "owner" || data.Role === "tenent"
+        (data: any) => data.Role === "Owner" || data.Role === "Tenent"
       );
-    } else if (role === "owner") {
-      filtered = Data.filter((data: any) => data.Role === "tenent");
-    } else {
-      filtered = Data
+    } else if (role === "Owner") {
+      filtered = Data.filter((data: any) => data.Role === "Tenent");
+    } else if (role === "SuperUser") {
+      filtered = Data.filter(
+        (data: any) =>
+          data.Role === "Owner" ||
+          data.Role === "Tenent" ||
+          data.Role === "Builder"
+      );
     }
     return filtered;
   }, [role, Data, search]);

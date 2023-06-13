@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchClientData = createAsyncThunk("fetchClientData", async () => {
-    const response = await fetch("https://3.226.14.5:7000/clients/");
-    console.log("resss")
+  const response = await fetch("https://3.226.14.5:7000/clients/");
   return response.json();
 });
 
@@ -14,8 +13,16 @@ export const clientData = createSlice({
     clientData: [],
     error: false,
     filteredClientData: [],
+    formData: {},
+    request: "Post",
   },
   reducers: {
+    requestObjects: (state: any, action: any) => {
+      state.formData = action.payload;
+    },
+    requests: (state: any, action: any) => {
+      state.request = action.payload;
+    },
     clientDataFiltered: (state: any, action: any) => {
       state.filteredClientData = action.payload;
     },
@@ -33,5 +40,6 @@ export const clientData = createSlice({
     });
   },
 });
-export const { clientDataFiltered } = clientData.actions;
+export const { clientDataFiltered, requestObjects, requests } =
+  clientData.actions;
 export default clientData.reducer;

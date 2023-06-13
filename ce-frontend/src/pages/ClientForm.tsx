@@ -62,7 +62,7 @@ const ClientForm = () => {
               Client Information
             </Typography>
           </Grid>
-          <Grid
+          {/* <Grid
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -97,11 +97,15 @@ const ClientForm = () => {
             >
               Property Information
             </Typography>
-          </Grid>
+          </Grid> */}
         </Box>
         <ClientFormCom />
       </Box>
-      <SnackBar message={message} duration={1000} navigate={-1} />
+      {message === "User already exists" ? (
+        <SnackBar message={message} duration={2000} navigate={{}} />
+      ) : (
+        <SnackBar message={message} duration={2000} navigate={-1} />
+      )}
     </>
   );
 };

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UserAuthenticationView, UserRegistrationView, CustomTokenObtainPairView, ChangePassword, Userlogout
+from .views import UserAlteration, UserAuthenticationView, UserRegistrationView, CustomTokenObtainPairView, ChangePassword, Userlogout
 from rest_framework_simplejwt.views import TokenRefreshView
 from django.contrib.auth.views import LogoutView
 urlpatterns = [
@@ -10,4 +10,6 @@ urlpatterns = [
     path("refreshtoken/", TokenRefreshView.as_view()),
     path("", UserRegistrationView.as_view()),
     path("change_password/", ChangePassword.as_view()),
+    path("<int:user_id>/update", UserAlteration.as_view()),
+    path("<int:user_id>/delete", UserAlteration.as_view()),
 ]

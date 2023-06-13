@@ -2,8 +2,18 @@ import React, { useEffect, useMemo, useState } from "react";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
-import { userFilteredlist, fetchUserList } from "../../Redux/LoginSlice";
+import {
+  userFilteredlist,
+  fetchUserList,
+  userRequestObjects,
+  userRequests,
+} from "../../Redux/LoginSlice";
 import { SuperAdminDataGridLogics } from "../../Utils/SuperAdminDataGridLogics";
+import { IconButton } from "@mui/material";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import { Link } from "react-router-dom";
+import AddUserFormLogics from "../../Utils/AddUserFormLogics";
 
 export default function SuperAdminDataGrid() {
   const { role } = SuperAdminDataGridLogics();
@@ -11,8 +21,49 @@ export default function SuperAdminDataGrid() {
     (state: any) => state.LoginSlice.filteredList
   );
   console.log("data", filteredUserList);
-
+  const { handleDelete } = AddUserFormLogics();
+  const dispatch = useDispatch();
   const columns: GridColDef[] = [
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 100,
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => (
+        <div
+          style={{
+            display: "flex",
+            gap: ".5rem",
+          }}
+        >
+          <IconButton
+            sx={{ boxShadow: 0, color: "black" }}
+            aria-label="edit"
+            component={Link}
+            to={"/add_user"}
+            onClick={() => {
+              console.log(",,", params.row);
+              dispatch<any>(userRequestObjects<any>(params.row));
+              dispatch<any>(userRequests<any>("Put"));
+            }}
+          >
+            <BorderColorIcon />
+          </IconButton>
+          <IconButton
+            sx={{ boxShadow: 0, color: "red" }}
+            size="small"
+            aria-label="edit"
+                  onClick={() => {
+                console.log(params.row.User_ID)
+              handleDelete(params.row.User_ID);
+            }}
+          >
+            <DeleteForeverIcon />
+          </IconButton>
+        </div>
+      ),
+    },
     {
       field: "Full_Name",
       headerName: "Name",
@@ -39,7 +90,7 @@ export default function SuperAdminDataGrid() {
     },
 
     {
-      field: " Status",
+      field: "Status",
       headerName: "Status",
       type: "number",
       width: 200,
@@ -52,16 +103,13 @@ export default function SuperAdminDataGrid() {
         return (
           <p
             style={{
-              //   background: status === "Active" ? "#36B37E33" : "#FF563033",
-              padding: "0.5rem",
+              background: status === "Active" ? "#36B37E33" : "#FF563033",
+              color: status === "Active" ? "#1B806A" : "#B71D18",
+              padding: ".4rem",
               borderRadius: "10px",
-              //   color: status === "Active" ? "#1B806A" : "#B71D18",
-              background: "#36B37E33",
-              color: "#1B806A",
             }}
           >
-            {/* {status} */}
-            Active
+            {status}
           </p>
         );
       },
@@ -82,7 +130,7 @@ export default function SuperAdminDataGrid() {
             borderBottom: "none",
           },
         }}
-        getRowId={(row: any) => row.User_Id}
+        getRowId={(row: any) => row.User_ID}
         rows={filteredUserList ? filteredUserList : []}
         columns={modifiedColumn}
         initialState={{
@@ -93,7 +141,7 @@ export default function SuperAdminDataGrid() {
           },
         }}
         pageSizeOptions={[5]}
-        checkboxSelection
+        // checkboxSelection
         disableRowSelectionOnClick
       />
     </Box>

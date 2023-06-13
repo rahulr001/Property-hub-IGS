@@ -42,9 +42,9 @@ export const AuthenticationLogics = () => {
       dispatch<any>(Token<any>(res.data.access));
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("role", decodedToken.role);
-      localStorage.setItem("user_id", decodedToken.user_id);
+      localStorage.setItem("user_id", decodedToken.User_ID);
       const role = decodedToken.role;
-      role !== "superuser" ? navigate("/home") : navigate("/super_admin");
+      role === "SuperUser" ? navigate("/super_admin") : navigate("/home");
     } catch (err: any) {
       dispatch<any>(snackBarOpenMsg<any>(err.response.data.detail));
       dispatch<any>(snackBarOpen<any>(true));
@@ -81,6 +81,7 @@ export const AuthenticationLogics = () => {
       Authorization: authToken,
     },
   });
+  ``;
 
   const ChangePassHandleChange = (e: any) => {
     const { name, value } = e.target;

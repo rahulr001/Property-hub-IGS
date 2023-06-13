@@ -8,10 +8,13 @@ import PropertyDataGrid from "./PropertyDataGrid";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { PropertyDataLogics } from "../Utils/PropertyDataGridLogics";
 import { TextFieldStyle } from "../Utils/Constants";
+import { useSelector } from "react-redux";
+import SnackBar from "./SnakeBar";
 
 type Props = {};
 
 const PropertyDataElements = (props: Props) => {
+  const message = useSelector((state: any) => state.PropertySlice.snackeBarMsg);
   const theme = useTheme();
   const {
     block,
@@ -114,8 +117,8 @@ const PropertyDataElements = (props: Props) => {
                 minWidth: "0rem",
                 color: theme.palette.info.main,
                 backgroundColor: theme.palette.primary.main,
-                          }}
-                          onClick={handleSearchClear}
+              }}
+              onClick={handleSearchClear}
             >
               <DeleteForeverIcon sx={{ fontSize: "25px" }} />
             </Button>
@@ -123,6 +126,7 @@ const PropertyDataElements = (props: Props) => {
           <PropertyDataGrid />
         </Paper>
       </Box>
+      <SnackBar message={message} duration={2000} navigate={0} />
     </>
   );
 };

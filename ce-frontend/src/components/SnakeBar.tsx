@@ -14,7 +14,6 @@ const SnackBar = ({ message, duration, navigate }: any) => {
     }
     dispatch<any>(snackBarOpen<any>(false));
     history(navigate);
-    console.log("goback works");
   };
   const [state, setState] = React.useState<any>({
     open: false,

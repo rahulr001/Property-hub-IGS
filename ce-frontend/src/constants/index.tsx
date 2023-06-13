@@ -194,8 +194,8 @@ export const Status = [
 
 export const AddUserFormInputs = [
   {
-    label: "Manager Name",
-    name: "full_name",
+    label: "Builder Name",
+    name: "Full_Name",
     placeholder: "John",
     required: true,
   },
@@ -207,26 +207,58 @@ export const AddUserFormInputs = [
   },
   {
     label: "City",
-    name: "city",
+    name: "City",
     placeholder: "ex. Chennai",
     required: false,
   },
   {
     label: "Address",
-    name: "address",
+    name: "Address",
     placeholder: "No 13, North Street, Chennai",
     required: false,
   },
   {
     label: "Mobile No",
-    name: "mobile_no",
+    name: "Mobile_No",
     placeholder: "9876543210",
     required: true,
   },
   {
     label: "GST No",
-    name: "gst_no",
+    name: "GST_No",
     placeholder: "33AAACC4175D1Z5",
     required: false,
+  },
+];
+export const ClientUserFormInputs = [
+  {
+    label: "Full Name",
+    name: "Full_Name",
+    placeholder: "John",
+    required: true,
+  },
+  {
+    label: "Email",
+    name: "email",
+    placeholder: "example@gmail.com",
+    required: true,
+  },
+  {
+    label: "City",
+    name: "City",
+    placeholder: "ex. Chennai",
+    required: false,
+  },
+  {
+    label: "Address",
+    name: "Address",
+    placeholder: "No 13, North Street, Chennai",
+    required: false,
+  },
+  {
+    label: "Mobile No",
+    name: "Mobile_No",
+    placeholder: "9876543210",
+    required: true,
   },
 ];

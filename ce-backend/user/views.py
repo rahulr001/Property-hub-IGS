@@ -2,14 +2,11 @@ from .models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import ChangePasswordSerializer, UserSerializer
+from .serializers import UserUpdateSerializer, ChangePasswordSerializer, UserSerializer
 from django.contrib.auth import authenticate, login, logout
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
-from rest_framework.authentication import TokenAuthentication, BasicAuthentication
-# Create your views here.
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -56,7 +53,7 @@ class UserRegistrationView(APIView):
 
     def post(self, request):
         data = request.data
-        mobile_no = request.data.get('mobile_no')
+        mobile_no = request.data.get('Mobile_No')
         password = request.data.get('password1')
         user_exists = User.objects.filter(Mobile_No=mobile_no)
         if user_exists:
@@ -65,7 +62,7 @@ class UserRegistrationView(APIView):
             result = 'Password Does not match'
         else:
             User.objects.create_user(
-                Mobile_No=mobile_no, password=password, Full_Name=data["full_name"], email=data['email'], Role=data['role'], Construction_Name=data['construction_name'], GST_No=data["gst_no"], City=data['city'], Address=data['address'])
+                Mobile_No=mobile_no, password=password, Full_Name=data["Full_Name"], email=data['email'], Role=data['role'],  GST_No=data["GST_No"], City=data['City'], Address=data['Address'], Status=data['Status'])
             result = 'User created successfully'
         return Response({'response': result})
 
@@ -79,7 +76,7 @@ class UserRegistrationView(APIView):
                 serializer = UserSerializer(data, many=True)
             return Response(serializer.data)
         except User.DoesNotExist:
-            return Response({"Response": "Users Data not Found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"response": "Users Data not Found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class ChangePassword(APIView):
@@ -104,3 +101,26 @@ class Userlogout(APIView):
     def post(self, request):
         logout(request)
         return Response({'response': 'logout successfull'})
+
+
+class UserAlteration(APIView):
+    def put(self, request, user_id):
+        print("qq")
+        data = request.data
+        try:
+            user = User.objects.get(User_ID=user_id)
+            serializer = UserUpdateSerializer(data=data, instance=user)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"response": "User Updated Successfully"})
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({"response": "User not found"})
+
+    def delete(self, request, user_id):
+        # try:
+        user = User.objects.get(User_ID=user_id)
+        user.delete()
+        return Response({"response": "User Deleted Successfully"})
+        # except:
+        #     return Response({"response": "User Not Found"}, status=status.HTTP_404_NOT_FOUND)

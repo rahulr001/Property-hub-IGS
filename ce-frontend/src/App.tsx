@@ -27,6 +27,10 @@ function App() {
           path="/client_form/:property_id/:propertyName"
           element={<ClientForm />}
         />
+        <Route
+          path="/client_form"
+          element={<ClientForm />}
+        />
         <Route path="/super_admin" element={<SuperAdmin />} />
         <Route path="/add_user" element={<AddUserForm />} />
         <Route path="/" element={<Login />} />
