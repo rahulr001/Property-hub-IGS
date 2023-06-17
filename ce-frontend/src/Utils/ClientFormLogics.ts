@@ -3,7 +3,6 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { snackBarOpen, snackBarOpenMsg } from "../Redux/PropertySlice";
-import AddUserFormLogics from "./AddUserFormLogics";
 
 export const ClientFormLogics = () => {
   const dispatch = useDispatch();
@@ -11,58 +10,23 @@ export const ClientFormLogics = () => {
   const url = useSelector((state: any) => state.ClientSlice.Url);
   const request = useSelector((state: any) => state.ClientSlice.request);
   const requestObject = useSelector((state: any) => state.ClientSlice.formData);
-  const userRequestObject = useSelector(
-    (state: any) => state.LoginSlice.formData
-  );
-  const role = localStorage.getItem("role");
 
   const user_id = localStorage.getItem("user_id");
-  const [userValues, setUserValues] = useState<any>(
-    request === "Post"
-      ? {
-          Mobile_No: "",
-          password1: "changeme",
-          password2: "changeme",
-          Full_Name: "",
-          email: "",
-          role:
-            role === "SuperUser"
-              ? "Builder"
-              : role === "Builder"
-              ? "Owner"
-              : role === "Owner"
-              ? "Tenent"
-              : "",
-          //   role: "SuperUser",
-          GST_No: "",
-          City: "",
-          Address: "",
-          Status: "Select",
-        }
-      : {
-          Mobile_No: userRequestObject.Mobile_No,
-          Full_Name: userRequestObject.Full_Name,
-          email: userRequestObject.email,
-          City: userRequestObject.City,
-          GST_No: userRequestObject.GST_No,
-          Address: userRequestObject.Address,
-          Status: userRequestObject.Status,
-        }
-  );
-
-  const UserHandleChange = (e: any) => {
-    const { name, value } = e.target;
-    setUserValues((preVal: any) => {
-      return {
-        ...preVal,
-        [name]: value,
-      };
-    });
-  };
   const [values, setValues] = useState<any>(
     request === "Post"
       ? {
           Client_PropertyID: parseInt(property_id),
+          Client_FullName: "",
+          Client_Mobile_No: null,
+          Client_email: "",
+          Client_GST_No: null,
+          Client_Role: "Owner",
+          Client_City: "",
+          Client_Address: "",
+          Client_password1: "changeme",
+          Client_password2: "changeme",
+          Client_Created_By: "default",
+          Client_Updated_BY: "default",
           Client_Block: "11",
           Client_FlatNo: "11",
           Client_PropertyTitle: propertyName,
@@ -82,6 +46,17 @@ export const ClientFormLogics = () => {
           Client_PropertyID: parseInt(
             requestObject.Client_PropertyID.Property_ID
           ),
+          Client_FullName: requestObject.Client_FullName,
+          Client_Mobile_No: requestObject.Client_Mobile_No,
+          Client_email: requestObject.Client_email,
+          Client_GST_No: requestObject.Client_GST_No,
+          Client_Role: requestObject.Client_Role,
+          Client_City: requestObject.Client_City,
+          Client_Address: requestObject.Client_Address,
+          Client_password1: requestObject.Client_password1,
+          Client_password2: requestObject.Client_password2,
+          Client_Created_By: requestObject.Client_Created_By,
+          Client_Updated_BY: requestObject.Client_Updated_BY,
           Client_Block: requestObject.Client_Block,
           Client_FlatNo: requestObject.Client_FlatNo,
           Client_PropertyTitle: requestObject.Client_PropertyTitle,
@@ -127,9 +102,21 @@ export const ClientFormLogics = () => {
       }));
     }
   };
+
   const handleClear = () => {
     setValues({
       Client_PropertyID: "",
+      Client_FullName: "",
+      Client_Mobile_No: null,
+      Client_email: "",
+      Client_GST_No: null,
+      Client_Role: "",
+      Client_City: "",
+      Client_Address: "",
+      Client_password1: "changeme",
+      Client_password2: "changeme",
+      Client_Created_By: "",
+      Client_Updated_BY: "",
       Client_Block: "",
       Client_FlatNo: "",
       Client_PropertyTitle: "",
@@ -146,135 +133,97 @@ export const ClientFormLogics = () => {
       Client_PropertyAmenities: [],
     });
   };
+
   const handleSubmit = () => {
     console.log("data", values);
     if (request === "Post") {
       axios
-        .post(`${url}/user/signup/`, userValues)
+        .post(`${url}/clients/`, values)
         .then((res) => {
-          console.log(res);
-          if (res.data.response === "User already exists") {
-            dispatch<any>(snackBarOpenMsg<any>(res.data.response));
-            dispatch<any>(snackBarOpen<any>(true));
-          } else {
-            axios
-              .post(`${url}/clients/`, values)
-              .then((res) => {
-                console.log(res.data);
-                dispatch<any>(snackBarOpenMsg<any>(res.data.response));
-                dispatch<any>(snackBarOpen<any>(true));
-              })
-              .catch((err): any => {
-                console.log(err);
-                handleClear();
-                window.alert(
-                  err.response.data.Client_FullName ||
-                    err.response.data.Client_ImgURL ||
-                    err.response.data.Client_MobileNumber ||
-                    err.response.data.Client_EMail ||
-                    err.response.data.Client_FullName ||
-                    err.response.data.Client_Block ||
-                    err.response.data.Client_FlatNo ||
-                    err.response.data.Client_PropertyTitle ||
-                    err.response.data.Client_PropertyType ||
-                    err.response.data.Client_ListingType ||
-                    err.response.data.Client_Location ||
-                    err.response.data.Client_Address ||
-                    err.response.data.Client_ListingPrice ||
-                    err.response.data.Client_BHK ||
-                    err.response.data.Client_Status ||
-                    err.response.data.Client_ParkingLot ||
-                    err.response.data.Client_ConstructionSqft ||
-                    err.response.data.Client_LandSqft ||
-                    err.response.data.Client_ShortDesc ||
-                    err.response.data.Client_LongDesc ||
-                    err.response.data.Client_PropertyAmenities ||
-                    "Something went wrong please login again"
-                );
-              });
-          }
+          console.log(res.data);
+          dispatch<any>(snackBarOpenMsg<any>(res.data.response));
+          dispatch<any>(snackBarOpen<any>(true));
         })
-        .catch((err) => {
+        .catch((err): any => {
           console.log(err);
-          window.alert(err);
+          handleClear();
+          window.alert(
+            err.response.data.Client_FullName ||
+              err.response.data.Client_ImgURL ||
+              err.response.data.Client_MobileNumber ||
+              err.response.data.Client_EMail ||
+              err.response.data.Client_FullName ||
+              err.response.data.Client_Block ||
+              err.response.data.Client_FlatNo ||
+              err.response.data.Client_PropertyTitle ||
+              err.response.data.Client_PropertyType ||
+              err.response.data.Client_ListingType ||
+              err.response.data.Client_Location ||
+              err.response.data.Client_Address ||
+              err.response.data.Client_ListingPrice ||
+              err.response.data.Client_BHK ||
+              err.response.data.Client_Status ||
+              err.response.data.Client_ParkingLot ||
+              err.response.data.Client_ConstructionSqft ||
+              err.response.data.Client_LandSqft ||
+              err.response.data.Client_ShortDesc ||
+              err.response.data.Client_LongDesc ||
+              err.response.data.Client_PropertyAmenities ||
+              "Something went wrong please login again"
+          );
         });
     } else if (request === "Put") {
       axios
-        .put(`${url}/user/${userRequestObject.User_ID}/update`, userValues)
+        .put(`${url}/clients/${requestObject.Client_ID}/update`, values)
         .then((res) => {
           console.log(res.data);
-          axios
-            .put(`${url}/clients/${requestObject.Client_ID}/update`, values)
-            .then((res) => {
-              console.log(res.data);
-              dispatch<any>(snackBarOpenMsg<any>(res.data.response));
-              dispatch<any>(snackBarOpen<any>(true));
-            })
-            .catch((err): any => {
-              console.log(err);
-              handleClear();
-              window.alert(
-                err.response.data.Client_FullName ||
-                  err.response.data.Client_ImgURL ||
-                  err.response.data.Client_MobileNumber ||
-                  err.response.data.Client_EMail ||
-                  err.response.data.Client_FullName ||
-                  err.response.data.Client_Block ||
-                  err.response.data.Client_FlatNo ||
-                  err.response.data.Client_PropertyTitle ||
-                  err.response.data.Client_PropertyType ||
-                  err.response.data.Client_ListingType ||
-                  err.response.data.Client_Location ||
-                  err.response.data.Client_Address ||
-                  err.response.data.Client_ListingPrice ||
-                  err.response.data.Client_BHK ||
-                  err.response.data.Client_Status ||
-                  err.response.data.Client_ParkingLot ||
-                  err.response.data.Client_ConstructionSqft ||
-                  err.response.data.Client_LandSqft ||
-                  err.response.data.Client_ShortDesc ||
-                  err.response.data.Client_LongDesc ||
-                  err.response.data.Client_PropertyAmenities ||
-                  "Something went wrong please login again"
-              );
-            });
+          dispatch<any>(snackBarOpenMsg<any>(res.data.response));
+          dispatch<any>(snackBarOpen<any>(true));
         })
-        .catch((err) => {
+        .catch((err): any => {
           console.log(err);
-          window.alert(err);
+          handleClear();
+          window.alert(
+            err.response.data.Client_FullName ||
+              err.response.data.Client_ImgURL ||
+              err.response.data.Client_MobileNumber ||
+              err.response.data.Client_EMail ||
+              err.response.data.Client_FullName ||
+              err.response.data.Client_Block ||
+              err.response.data.Client_FlatNo ||
+              err.response.data.Client_PropertyTitle ||
+              err.response.data.Client_PropertyType ||
+              err.response.data.Client_ListingType ||
+              err.response.data.Client_Location ||
+              err.response.data.Client_Address ||
+              err.response.data.Client_ListingPrice ||
+              err.response.data.Client_BHK ||
+              err.response.data.Client_Status ||
+              err.response.data.Client_ParkingLot ||
+              err.response.data.Client_ConstructionSqft ||
+              err.response.data.Client_LandSqft ||
+              err.response.data.Client_ShortDesc ||
+              err.response.data.Client_LongDesc ||
+              err.response.data.Client_PropertyAmenities ||
+              "Something went wrong please login again"
+          );
         });
     }
   };
 
-  const handleClientDelete = (user_Id: any, client_Id: any) => {
-    if (user_id === user_Id) {
-      window.alert("User cannot deleted");
-    }
+  const handleClientDelete = (client_Id: any) => {
     axios
-      .delete(`${url}/user/${user_Id}/delete`)
+      .delete(`${url}/clients/${client_Id}/delete`)
       .then((res) => {
-        if (res.data.response === "User not found") {
-          dispatch<any>(snackBarOpenMsg<any>(res.data.response));
-          dispatch<any>(snackBarOpen<any>(true));
-        } else {
-          axios
-            .delete(`${url}/clients/${client_Id}/delete`)
-            .then((res) => {
-              console.log(res);
-              dispatch<any>(snackBarOpenMsg<any>(res.data.response));
-              dispatch<any>(snackBarOpen<any>(true));
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
-
         console.log(res);
+        dispatch<any>(snackBarOpenMsg<any>(res.data.response));
+        dispatch<any>(snackBarOpen<any>(true));
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
   return {
     handleChange,
     handleCheckbox,
@@ -282,7 +231,5 @@ export const ClientFormLogics = () => {
     values,
     handleClear,
     handleClientDelete,
-    UserHandleChange,
-    userValues,
   };
 };

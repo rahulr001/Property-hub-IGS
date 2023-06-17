@@ -12,4 +12,5 @@ urlpatterns = [
     path("change_password/", ChangePassword.as_view()),
     path("<int:user_id>/update", UserAlteration.as_view()),
     path("<int:user_id>/delete", UserAlteration.as_view()),
+   
 ]

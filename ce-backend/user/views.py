@@ -1,8 +1,8 @@
-from .models import User
+from .models import User 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import UserUpdateSerializer, ChangePasswordSerializer, UserSerializer
+from .serializers import UserUpdateSerializer, ChangePasswordSerializer, UserSerializer 
 from django.contrib.auth import authenticate, login, logout
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -124,3 +124,5 @@ class UserAlteration(APIView):
         return Response({"response": "User Deleted Successfully"})
         # except:
         #     return Response({"response": "User Not Found"}, status=status.HTTP_404_NOT_FOUND)
+
+

@@ -55,10 +55,7 @@ export default function PropertyDataGrid() {
             aria-label="edit"
             onClick={() => {
               console.log(params.row);
-              handleClientDelete(
-                params.row.Client_PropertyID.User_ID.User_ID,
-                params.row.Client_ID
-              );
+              handleClientDelete(params.row.Client_ID);
             }}
           >
             <DeleteForeverIcon />
@@ -67,12 +64,11 @@ export default function PropertyDataGrid() {
       ),
     },
     {
-      field: "Client_PropertyID",
+      field: "Client_FullName",
       headerName: "Name",
       width: 180,
       headerAlign: "center",
       align: "center",
-      renderCell: (params) => params.value.User_ID.Full_Name,
     },
     {
       field: "Client_Block",

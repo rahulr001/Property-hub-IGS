@@ -233,32 +233,38 @@ export const AddUserFormInputs = [
 export const ClientUserFormInputs = [
   {
     label: "Full Name",
-    name: "Full_Name",
+    name: "Client_FullName",
     placeholder: "John",
     required: true,
   },
   {
     label: "Email",
-    name: "email",
+    name: "Client_email",
     placeholder: "example@gmail.com",
     required: true,
   },
   {
     label: "City",
-    name: "City",
+    name: "Client_City",
     placeholder: "ex. Chennai",
     required: false,
   },
   {
     label: "Address",
-    name: "Address",
+    name: "Client_Address",
     placeholder: "No 13, North Street, Chennai",
     required: false,
   },
   {
     label: "Mobile No",
-    name: "Mobile_No",
+    name: "Client_Mobile_No",
     placeholder: "9876543210",
     required: true,
+  },
+  {
+    label: "GST No",
+    name: "Client_GST_No",
+    placeholder: "33AAACC4175D1Z5",
+    required: false,
   },
 ];

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User 
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -20,4 +20,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['Full_Name', 'Mobile_No',
-                  'City', 'Address', 'email', 'GST_No','Status']
+                  'City', 'Address', 'email', 'GST_No', 'Status']
+
+
+ 

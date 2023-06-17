@@ -22,4 +22,5 @@ urlpatterns = [
     path("property/", include('property_info.urls')),
     path('clients/', include('client_info.urls')),
     path('user/',include('user.urls')),
+ 
 ]

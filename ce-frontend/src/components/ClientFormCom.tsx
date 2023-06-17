@@ -24,15 +24,8 @@ import { TextValidatorStyle, TypographyStyles } from "../Utils/Constants";
 import AddUserFormLogics from "../Utils/AddUserFormLogics";
 
 const ClientFormCom = () => {
-  const {
-    handleChange,
-    handleCheckbox,
-    values,
-    handleSubmit,
-    handleClear,
-    UserHandleChange,
-    userValues,
-  } = ClientFormLogics();
+  const { handleChange, handleCheckbox, values, handleSubmit, handleClear } =
+    ClientFormLogics();
   //   const { userValues, userHandleSubmit, UserHandleChange } =
   //     AddUserFormLogics();
 
@@ -77,8 +70,8 @@ const ClientFormCom = () => {
                 placeholder={inputs.placeholder}
                 id="outlined-basic"
                 variant="outlined"
-                value={userValues[inputs.name]}
-                onChange={UserHandleChange}
+                value={values[inputs.name]}
+                onChange={handleChange}
                 name={inputs.name}
                 required={inputs.required}
                 style={{
@@ -92,9 +85,9 @@ const ClientFormCom = () => {
           <Grid item xs={6}>
             <Typography style={TypographyStyles}>Status</Typography>
             <TextValidator
-              name="Status"
-              value={userValues.Status}
-              onChange={UserHandleChange}
+              name="Client_Status"
+              value={values.Client_Status}
+              onChange={handleChange}
               variant="outlined"
               sx={TextValidatorStyle}
               style={{ marginTop: "5px", width: "250px" }}

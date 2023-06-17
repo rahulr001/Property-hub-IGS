@@ -34,24 +34,45 @@ export const AuthenticationLogics = () => {
   };
   const handleSubmit = async () => {
     try {
-      let res = await axios.post(`${url}/user/token/`, values);
-      console.log(res);
-      const decodedToken: any = jwtDecode(res.data.access);
-      console.log(decodedToken);
-      setToken(decodedToken);
-      dispatch<any>(Token<any>(res.data.access));
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("role", decodedToken.role);
-      localStorage.setItem("user_id", decodedToken.User_ID);
-      const role = decodedToken.role;
-      role === "SuperUser" ? navigate("/super_admin") : navigate("/home");
+      axios
+        .get(`${url}/clients/client_login/${values.Mobile_No}`)
+        .then((res) => {
+          if (res.data.Client_Role === "Owner") {
+            axios.post(`${url}/clients/client_login/`, values).then((res) => {
+              localStorage.setItem("isLoggedIn", "true");
+              localStorage.setItem("role", res.data.context.role);
+              localStorage.setItem("user_id", res.data.context.user_id);
+              navigate("/super_admin");
+            });
+          } else {
+            axios
+              .post(`${url}/user/token/`, values)
+              .then((res) => {
+                console.log(res);
+                const decodedToken: any = jwtDecode(res.data.access);
+                console.log(decodedToken);
+                setToken(decodedToken);
+                dispatch<any>(Token<any>(res.data.access));
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("role", decodedToken.role);
+                localStorage.setItem("user_id", decodedToken.User_ID);
+                const role = decodedToken.role;
+                role === "SuperUser"
+                  ? navigate("/super_admin")
+                  : navigate("/home");
+              })
+              .catch((err: any) => {
+                console.log("res", err);
+                dispatch<any>(snackBarOpenMsg<any>(err.response.data.detail));
+                dispatch<any>(snackBarOpen<any>(true));
+                dispatch<any>(loginError<any>(true));
+                console.log(err);
+              });
+          }
+        });
     } catch (err: any) {
-      dispatch<any>(snackBarOpenMsg<any>(err.response.data.detail));
-      dispatch<any>(snackBarOpen<any>(true));
-      dispatch<any>(loginError<any>(true));
       console.log(err);
     }
-    console.log(token);
   };
 
   const handleClick = (element: any) => {

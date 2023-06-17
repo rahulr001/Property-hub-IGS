@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'client_info',
     'property_info',
     'user',
+
+
     'multiselectfield',
     'corsheaders',
     'rest_framework_simplejwt',

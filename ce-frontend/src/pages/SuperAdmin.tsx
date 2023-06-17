@@ -58,14 +58,7 @@ const SuperAdmin = (props: Props) => {
               textDecoration: "none",
             }}
           >
-            {/* {role === "superuser"
-              ? "Admin"
-              : role === "admin"
-              ? "Owner"
-              : role == "owner"
-              ? "Tenent"
-              : ""} */}
-            Builder
+            {role === "SuperUser" ? "Builder" : role == "Owner" ? "Tenent" : ""}
           </Typography>
 
           <Button

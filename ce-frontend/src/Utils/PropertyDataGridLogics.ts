@@ -14,7 +14,7 @@ export const PropertyDataLogics = () => {
   const Data: any = useSelector((state: any) => state.ClientSlice.clientData);
   const [block, setBlock] = React.useState<string>("All");
   const [search, setSearch] = React.useState<string>("");
-console.log(Data)
+
   const FilteredData = Data.filter(
     (item: any) => item.Client_PropertyID.Property_ID === Idx
   );
